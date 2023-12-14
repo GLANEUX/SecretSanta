@@ -17,3 +17,8 @@ let userSchema = new Schema({
 });
 
 module.exports = mongoose.model('User', userSchema);
+
+
+// # USERS
+// * `email`: required, unique, email type
+// * `password`: required, string

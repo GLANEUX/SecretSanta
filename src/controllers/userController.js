@@ -1,16 +1,16 @@
-
-
 const User = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 require('dotenv').config();
 const saltRounds = 10;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{5,}$/;
+const Email = require('mongoose-type-email');
 
 
 exports.userRegister = async (req, res) =>  {
     try {
         let newUser = new User(req.body);
+
         if (!passwordRegex.test(newUser.password)) {
             res.status(401).json({
                 message: "Le mot de passe doit faire au moin 5 caractère et contenir au moins une majuscule, une minuscule, un chiffre, et un caractère spécial."
@@ -22,7 +22,7 @@ exports.userRegister = async (req, res) =>  {
         res.status(201).json({ message: `Utilisateur créé: ${user.email}` });
     } catch (error) {
         console.log(error);
-        res.status(401).json({ message: "Requête invalide" });
+        res.status(401).json({ message: `Requête invalide` });
     }
 }
 
@@ -91,3 +91,23 @@ exports.userPut = async (req, res) =>{
     }
 }
 
+
+
+exports.userListAll = async (req,res) => {
+    try {
+        const users = await User.find({});
+        
+        try {
+
+        res.status(200).json(users._id, users.email);
+            
+        } catch (error) { 
+            console.log(error);
+            res.status(401).json({ message: "Requête invalide" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message: "Une erreur s'est produite lors du traitement"});
+    }
+
+}
