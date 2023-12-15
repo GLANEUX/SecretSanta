@@ -86,6 +86,7 @@ exports.verifyMemberToken = async (req, res, next) => {
             });
 
             req.user = payload;
+            const usertoken = (req.user = payload);
 
             if (payload.user_id == req.params.user_id && payload.group_id == req.params.group_id) {
                 next();

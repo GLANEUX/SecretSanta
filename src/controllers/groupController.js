@@ -1,5 +1,6 @@
 const Group = require('../models/groupModel');
 const Member = require('../models/memberModel');
+const User = require('../models/userModel');
 
 
 exports.groupCreate = async (req, res) => {
@@ -57,7 +58,6 @@ exports.grouplist = async (req, res) => {
 
 
 
-//a tester
 exports.groupDelete = async (req, res) => {
     try {
         const groups = await Group.find({ _id: req.params.group_id });
@@ -73,9 +73,27 @@ exports.groupDelete = async (req, res) => {
             res.status(401).json({ message: "Vous n'êtes pas l'administrateur de ce groupe" });
             return;
         }
+
+
+
+
+        const members = await Member.find({ group_id: req.params.group_id, accept: true });
+
+        for (const member of members) {
+            const user = await User.findById(member.user_id);
+            
+            if (user && user.invited === true) {
+                await User.findByIdAndDelete(user._id);
+            }
+        }
+
+
         await Member.deleteMany({ group_id: req.params.group_id });
 
         await Group.findByIdAndDelete(req.params.group_id);
+
+
+        
 
         res.status(200).json({ message: 'Groupe supprimé' });
     } catch (error) {
@@ -85,8 +103,12 @@ exports.groupDelete = async (req, res) => {
 };
 
 
+
+
+
 exports.groupUpdate = async (req, res) => {
     try {
+        
         const groups = await Group.find({ _id: req.params.group_id });
 
         if (groups.length === 0) {
@@ -101,6 +123,13 @@ exports.groupUpdate = async (req, res) => {
             return;
         }
 
+        if (req.body.name === undefined) {
+            res.status(401).json({
+                message: "Remplissez au moins un des champs"
+            });
+            return;
+        }
+
         const updatedGroup = await Group.findByIdAndUpdate(
             req.params.group_id,
             { name: req.body.name },
@@ -108,6 +137,79 @@ exports.groupUpdate = async (req, res) => {
         );
 
         res.status(200).json({ message: `Groupe modifié: ${updatedGroup.name}` });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Une erreur s'est produite lors du traitement" });
+    }
+};
+
+
+
+
+
+
+exports.seeMySanta = async (req, res) => {
+    try {
+        const users = await Member.findOne({ user_id: req.params.user_id, group_id: req.params.group_id, accept: true });
+
+        if (!users) {
+            res.status(404).json({ message: "Vous n'appartenez pas à ce groupe ou n'avez pas encore accepté l'invitation" });
+            return;
+        }
+        
+        let secretname = { email: "" };
+        if (users.santa_id === "" || users.santa_id === undefined) {
+            secretname.email = " personne pour l'instant, attendait que l'administrateur lance le secretSanta";
+        } else {
+            const user = await User.findOne({ _id: users.santa_id });
+            secretname.email = user.email;
+        }
+        
+        res.status(200).json({ message: `Vous devez offrir un cadeau à ${secretname.email}` });
+        
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Une erreur s'est produite lors du traitement" });
+    }
+};
+
+
+exports.seeMembersSanta = async (req, res) => {
+    try {
+        
+    const users = await Member.find({ user_id: req.params.user_id, group_id: req.params.group_id, accept: true });
+
+    if (users.length === 0) {
+        res.status(404).json({ message: "Ce groupe n'existe pas" });
+        return;
+    }
+    
+    const isAdmin = Group.findOne({user_id: req.params.user_id, _id: req.params.group_id,});
+    
+    if (!isAdmin) {
+        res.status(401).json({ message: "Vous n'êtes pas l'administrateur de ce groupe" });
+        return;
+    }
+
+    const groupMembers = await Member.find({ group_id: req.params.group_id });
+
+    if (!groupMembers || groupMembers.length === 0) {
+        res.status(404).json({ message: "Aucun membre trouvé dans ce groupe" });
+        return;
+    }
+
+    const membersData = await Promise.all(groupMembers.map(async member => {
+        const userData = await User.findOne({ _id: member.user_id });
+        const santaData = member.santa_id ? await User.findOne({ _id: member.santa_id }) : null;
+
+        return {
+            memberEmail: userData.email,
+            santaEmail: santaData ? santaData.email : "Pas encore attribué",
+            accept: member.accept,
+        };
+    }));
+
+    res.status(200).json(membersData);
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Une erreur s'est produite lors du traitement" });

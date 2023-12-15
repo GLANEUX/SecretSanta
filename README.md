@@ -29,7 +29,7 @@ Ajouter des create update
 - 🔐`/groups/:group_id` return delete group (`DELETE`)
 - 🔐`/groups/:group_id` return modified name (`PUT`)
 - 🔐`/groups/:group_id` return your santa [admin see all] (`GET`)
-- 🔐`/groups/:group_id` return list of all and blend (`POST`)
+<!-- - 🔐`/groups/:group_id` return list of all and blend (`POST`) -->
 - 🔐`/groups/:user_id` return all group were they are (`GET`)
 
 # MEMBERS
@@ -38,7 +38,6 @@ Ajouter des create update
 - 🔐`/members/:user_id/:group_id` return delete user (`DELETE`) 
 - 🔐`/members/:user_id/:group_id/accept` return accept ok (`POST`) TOKEN need
 - 🔐`/members/:user_id/:group_id/decline` return supprimer (`POST`) TOKEN need
-
 
 
 

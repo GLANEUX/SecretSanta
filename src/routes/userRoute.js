@@ -10,7 +10,7 @@ router
 
 router
     .route('/login')
-    .post(userController.userLogin);
+    .post(userController.userLogin); 
 
 router
     .route('/')
@@ -18,7 +18,7 @@ router
     
 router
     .route('/:user_id')
-    .delete(jwtMiddleware.verifyUserToken, userController.userDelete)
+    .delete(jwtMiddleware.verifyUserToken, userController.userDelete) //ça ne supprime pas les users avec intited: true
     .put(jwtMiddleware.verifyUserToken, userController.userPut);
 
 module.exports = router;

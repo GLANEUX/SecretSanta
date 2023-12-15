@@ -6,7 +6,6 @@ const Email = require('mongoose-type-email');
 let userSchema = new Schema({
     email: {
         type: Email,
-        correctTld: true,
         required: true,
         unique: true,
     },

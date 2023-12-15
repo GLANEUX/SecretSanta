@@ -4,10 +4,6 @@ const router = express.Router();
 const memberController = require('../controllers/memberController');
 const jwtMiddleware = require('../middlewares/jwtMiddleware');
 
-// router
-//     .route('/:group_id/secretsanta')
-//     .post(memberController.);
-
 router
     .route('/:group_id')
     .post(jwtMiddleware.verifyToken, memberController.memberRequest)
@@ -26,13 +22,11 @@ router
     .route('/:user_id/:group_id/accept')
     .post(jwtMiddleware.verifyMemberToken, memberController.memberAccept)
 
-// router
-//     .route('/:group_id/secretsanta')
-//     .post(memberController.memberSecretSanta)
+router
+    .route('/:user_id/:group_id/secretsanta')
+    .post(jwtMiddleware.verifyUserToken, memberController.memberSecretSanta) //ça ne supprime pas les users avec intited: true
 
 module.exports = router;
 
-// # MEMBERS
-// - 🔐`/members/:group_id/secretsanta` return list of all and blend (`POST`)
-// - 🔐`/members/:user_id/:group_id` return delete user (`DELETE`)
+
 
