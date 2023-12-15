@@ -151,10 +151,6 @@ exports.memberRequest = async (req, res) => {
 };
 
 
-
-
-
-
 exports.memberDecline = async (req, res) => {
     try {
 
@@ -205,7 +201,6 @@ exports.memberAccept = async (req, res) => {
         res.status(500).json({ message: "Une erreur s'est produite lors du traitement" });
     }
 };
-
 
 
 exports.memberDelete = async (req, res) => {
@@ -265,12 +260,19 @@ exports.memberDelete = async (req, res) => {
     }
 }
 
-
-
 const assignSecretSantas = async (groupId) => {
     try {
         // Remove members with accept false
         await Member.deleteMany({ group_id: groupId, accept: false });
+        
+// Find all members of the group who have not accepted the invitation
+const members = await Member.find({ group_id: groupId, accept: false });
+
+// Iterate through members and delete corresponding users with invited set to true
+for (const member of members) {
+    const user = await User.findByIdAndDelete(member.user_id);
+
+}
 
         // Find all members of the group who have accepted the invitation
         const groupMembers = await Member.find({ group_id: groupId, accept: true });
@@ -315,7 +317,6 @@ const assignSecretSantas = async (groupId) => {
     }
 };
 
-// ... (rest of the code remains the same)
 
 // Helper function to shuffle an array (Fisher-Yates algorithm)
 const shuffleArray = (array) => {

@@ -21,7 +21,6 @@ exports.groupCreate = async (req, res) => {
 }
 
 
-
 exports.grouplist = async (req, res) => {
     try {
         const users = await Member.find({ user_id: req.params.user_id, accept: true });
@@ -54,12 +53,9 @@ exports.grouplist = async (req, res) => {
 };
 
 
-
-
-
-
 exports.groupDelete = async (req, res) => {
     try {
+        // Check if the group exists
         const groups = await Group.find({ _id: req.params.group_id });
 
         if (groups.length === 0) {
@@ -67,6 +63,7 @@ exports.groupDelete = async (req, res) => {
             return;
         }
 
+        // Check if the requester is an administrator of the group
         const isAdmin = groups.some(group => group.user_id.toString() === req.params.user_id);
 
         if (!isAdmin) {
@@ -77,19 +74,20 @@ exports.groupDelete = async (req, res) => {
 
 
 
-        const members = await Member.find({ group_id: req.params.group_id, accept: true });
+// Find all members of the group who have not accepted the invitation
+const members = await Member.find({ group_id: req.params.group_id, accept: false });
 
-        for (const member of members) {
-            const user = await User.findById(member.user_id);
-            
-            if (user && user.invited === true) {
-                await User.findByIdAndDelete(user._id);
-            }
-        }
+// Iterate through members and delete corresponding users with invited set to true
+for (const member of members) {
+    const user = await User.findByIdAndDelete(member.user_id);
+
+}
 
 
+        // Delete all members of the group
         await Member.deleteMany({ group_id: req.params.group_id });
 
+        // Delete the group
         await Group.findByIdAndDelete(req.params.group_id);
 
 
@@ -101,10 +99,6 @@ exports.groupDelete = async (req, res) => {
         res.status(500).json({ message: "Une erreur s'est produite lors du traitement" });
     }
 };
-
-
-
-
 
 exports.groupUpdate = async (req, res) => {
     try {
@@ -142,10 +136,6 @@ exports.groupUpdate = async (req, res) => {
         res.status(500).json({ message: "Une erreur s'est produite lors du traitement" });
     }
 };
-
-
-
-
 
 
 exports.seeMySanta = async (req, res) => {

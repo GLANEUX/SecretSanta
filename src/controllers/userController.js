@@ -94,50 +94,42 @@ exports.userLogin = async (req, res) => {
 
 };
 
-
-
-
-
-
-
+//a tester
 exports.userDelete = async (req, res) => {
-
     try {
+        // Find all groups where the user is an admin
+        const groups = await Group.find({ user_id: req.params.user_id });
 
+        if (groups.length > 0) {
+            // Iterate through each group
+            for (const group of groups) {
+                const group_id = group._id;
 
-        const group = await Group.find({ user_id: req.params.user_id });
+                // Find all members of the group who have not accepted the invitation
+                const members = await Member.find({ group_id: group_id, accept: false });
 
-        
-        if (group.length > 0) {
-            const group_id = group[0]._id;
-        
-            await Member.deleteMany({ group_id: group_id });
-            await Group.findByIdAndDelete(group_id);
+                // Iterate through members and delete corresponding users with invited set to true
+                for (const member of members) {
+                    const user = await User.findByIdAndDelete(member.user_id);
+                }
+
+                // Delete all members of the group
+                await Member.deleteMany({ group_id: group_id });
+
+                // Delete the group itself
+                await Group.findByIdAndDelete(group_id);
+            }
         }
 
+        // Delete the user
         await User.findByIdAndDelete(req.params.user_id);
 
         res.status(200).json({ message: 'Utilisateur supprimé' });
-
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: "Une erreur s'est produite lors du traitement" });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -179,7 +171,6 @@ exports.userPut = async (req, res) => {
         res.status(500).json({ message: "Une erreur s'est produite lors du traitement" });
     }
 }
-
 
 
 exports.userListAll = async (req, res) => {
