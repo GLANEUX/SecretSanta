@@ -14,6 +14,3 @@ let groupSchema = new Schema({
 
 module.exports = mongoose.model('Group', groupSchema);
 
-// # GROUPS
-// * `user_id`: required, string
-// * `name`: required, string

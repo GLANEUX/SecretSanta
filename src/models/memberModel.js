@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-let groupSchema = new Schema({
+let memberSchema = new Schema({
     user_id: {
         type: String,
         required: true,
@@ -12,15 +12,17 @@ let groupSchema = new Schema({
     },
     santa_id: {
         type: String,
+    },
+    accept: {
+        type: Boolean,
+        required: true
+    },
+    admin: {
+        type: Boolean,
         required: true
     }
 });
 
-module.exports = mongoose.model('Group', groupSchema);
+module.exports = mongoose.model('Member', memberSchema);
 
 
-
-// # MEMBERS
-// * `group_id`: required, string
-// * `user_id`: required, string
-// * `santa_id`: string

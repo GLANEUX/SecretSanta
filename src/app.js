@@ -22,4 +22,7 @@ app.use('/users', userRoute);
 const groupRoute = require('./routes/groupRoute');
 app.use('/groups', groupRoute);
 
+const memberRoute = require('./routes/memberRoute');
+app.use('/members', memberRoute);
+
 app.listen(port,host);

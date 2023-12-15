@@ -15,7 +15,7 @@
 * `user_id`: required, string
 * `santa_id`: string
 
-
+Ajouter des create update
 
 # /USERS
 -   `/users/register` return email, [email correct & can't already exist, secure password] (`POST`)
@@ -32,11 +32,10 @@
 - 🔐`/groups/:group_id` return list of all and blend (`POST`)
 - 🔐`/groups/:user_id` return all group were they are (`GET`)
 
-
-
 # MEMBERS
 - 🔐`/members/:group_id/secretsanta` return list of all and blend (`POST`)
 - 🔐`/members/:user_id/:group_id` return a token (`POST`) TOKEN
+- 🔐`/members/:user_id/:group_id` return delete user (`DELETE`) 
 - 🔐`/members/:user_id/:group_id/accept` return accept ok (`POST`) TOKEN need
 - 🔐`/members/:user_id/:group_id/decline` return supprimer (`POST`) TOKEN need
 
@@ -77,12 +76,14 @@ Features to Implement:
 - 💯 Complete README to initialize the project	
 - 💻 Code quality and clarity	
 - 🔒 API security	
-- 🚫 Good error handling and data validation	
+
+
 - 📄 API documentation / Postman Collection
 
 
-# Optional Bonuses:
-	
-- ✅ Implement unit tests 	
-- 🌍 Deploy the API on a server (Heroku, AWS, etc.)	
-- Create an interface for group administration (view members, delete groups, etc.).
+update créated
+
+
+id nom owen create update
+
+usr group accepter
