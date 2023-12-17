@@ -4,14 +4,10 @@ const swaggerOptions = {
   definition: {
     openapi: "3.1.0",
     info: {
-      title: "F1 Reaction timer API",
+      title: "Secret Santa API",
       version: "0.1.0",
       description:
-        "This is a simple CRUD API application made with Express and documented with Swagger",
-      license: {
-        name: "MIT",
-        url: "https://spdx.org/licenses/MIT.html",
-      },
+        "A secret santa api",
       contact: {
         name: "Océane",
         email: "oceane.glaneux@my-digital-school.org",

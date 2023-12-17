@@ -1,105 +1,43 @@
+# Secret Santa API
+
+## Introduction
+
+Welcome to the Secret Santa API, a robust solution for managing user registration, login, and user-related functionalities. This API is built on Node.js, Express, and MongoDB, offering a seamless experience for handling user interactions.
+
+Whether you're setting up a Secret Santa event, managing user accounts, or enhancing security through token authentication, the Secret Santa API has you covered. Follow the instructions below to get started and make the most of this powerful API.
+
+Let the festivities begin with the Secret Santa API! 🎅✨
 
 
+### Prerequisites
 
-réorganisation de code et test finaux 
-documentation
-developement -> main
+- Node.js
+- npm
+- MongoDB
+- Postman
 
-// si le temps faire du front
+### Installation
 
+Fill in the `.env` file. (you can find an en.sample with exemple)
 
+Reinstall dependencies if needed:
 
+```json
+"bcrypt": "^5.1.1",
+"dotenv": "^16.3.1",
+"express": "^4.18.2",
+"jsonwebtoken": "^9.0.2",
+"mongoose": "^8.0.3",
+"mongoose-type-email": "^1.1.2",
+"nodemon": "^3.0.2",
+"swagger-jsdoc": "^6.2.8",
+"swagger-ui-express": "^5.0.0"
+```
 
+# Usage
 
+Run npm start in the src directory.
 
+# Authors
 
-
-
-# 🎄 Develop an API for a "Secret Santa" Application in Node.js 🎁
-
-
-# USERS
-* `email`: required, unique, email type
-* `password`: required, string
-
-# GROUPS
-* `user_id`: required, string
-* `name`: required, string
-
-
-# MEMBERS
-* `group_id`: required, string
-* `user_id`: required, string
-* `santa_id`: string
-
-Ajouter des create update
-
-# /USERS
--   `/users/register` return email, [email correct & can't already exist, secure password] (`POST`)
--   `/users/login` return a token, [good mdp & email] (`POST`) `TOKEN`
-- 🔐`/users/:user_id` return user delete (`DELETE`)
-- 🔐`/users/:user_id` return the new email (`PUT`)
-- 🔒`/users` return all the users (`GET`)
-
-# /GROUPS
-- 🔒`/groups/new` return group name & you're admin (`POST`)
-- 🔐`/groups/:group_id` return delete group (`DELETE`)
-- 🔐`/groups/:group_id` return modified name (`PUT`)
-- 🔐`/groups/:group_id` return your santa [admin see all] (`GET`)
-<!-- - 🔐`/groups/:group_id` return list of all and blend (`POST`) -->
-- 🔐`/groups/:user_id` return all group were they are (`GET`)
-
-# MEMBERS
-- 🔐`/members/:group_id/secretsanta` return list of all and blend (`POST`)
-- 🔐`/members/:user_id/:group_id` return a token (`POST`) TOKEN
-- 🔐`/members/:user_id/:group_id` return delete user (`DELETE`) 
-- 🔐`/members/:user_id/:group_id/accept` return accept ok (`POST`) TOKEN need
-- 🔐`/members/:user_id/:group_id/decline` return supprimer (`POST`) TOKEN need
-
-
-
-## Objective:
-
-Create an API in Node.js for a "Secret Santa" application.
-The API should enable users to register, create groups, and secretly assign people to each group member.
-
-Features to Implement:
-
-# 👤 1. User Registration and Authentication
-	
-- User account creation with authentication.
-- Managing password security.
-- Implementing JWT authentication.
-
-
-# 🧑‍🤝‍🧑 2. Creation and Management of Groups
-	
-- Allowing users to create groups.	
-- Inviting members via email.	
-- Accepting or declining invitations.
-
-
-# 🎅 3. Secret Assignment of "Secret Santas"
-
-- Algorithm to randomly assign a group member to each participant.	
-- Ensuring no one ends up with their own name.
-
-
-# 🔴 Requirements
-	
-- ✔️ Git Flow or Github flow	
-- 〰️ Comment your code	
-- 💯 Complete README to initialize the project	
-- 💻 Code quality and clarity	
-- 🔒 API security	
-
-
-- 📄 API documentation / Postman Collection
-
-
-update créated
-
-
-id nom owen create update
-
-usr group accepter
+Océane GLANEUX (https://github.com/GLANEUX)

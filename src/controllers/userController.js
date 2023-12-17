@@ -18,6 +18,15 @@ const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$
  */
 exports.userRegister = async (req, res) => {
     try {
+        
+        // Check if a user with the same email already exists
+        const existingUser = await User.findOne({ email: req.body.email });
+
+        if (existingUser) {
+            // If an existing user is found, respond with a conflict status (HTTP 409)
+            return res.status(409).json({ message: "User with this email already exists." });
+        }
+        
         // Create a new user with the provided data
         const newUser = new User({
             ...req.body,
@@ -29,7 +38,7 @@ exports.userRegister = async (req, res) => {
 
         // Check if the provided email is valid
         if (!emailRegex.test(req.body.email)) {
-            res.status(401).json({
+            res.status(422).json({
                 message: "Invalid email address."
             });
             return;
@@ -37,7 +46,7 @@ exports.userRegister = async (req, res) => {
 
         // Check if the provided password meets the required criteria
         if (!passwordRegex.test(newUser.password)) {
-            res.status(401).json({
+            res.status(422).json({
                 message: "Password must be at least 5 characters and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
             });
             return;
@@ -69,7 +78,7 @@ exports.userLogin = async (req, res) => {
 
         // Check if the user exists
         if (!user) {
-            res.status(500).json({ message: "This user does not exist" });
+            res.status(404).json({ message: "This user does not exist" });
             return;
         }
 
@@ -77,7 +86,7 @@ exports.userLogin = async (req, res) => {
         if (user.invited === "true") {
             // Check if the provided password meets the required criteria
             if (!passwordRegex.test(req.body.password)) {
-                res.status(401).json({
+                res.status(422).json({
                     message: "Password must be at least 5 characters and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
                 });
                 return;
@@ -161,7 +170,7 @@ exports.userDelete = async (req, res) => {
         // Delete the user
         await User.findByIdAndDelete(req.params.user_id);
 
-        res.status(200).json({ message: 'User deleted' });
+        res.status(201).json({ message: 'User deleted' });
     } catch (error) {
         // Log the error and respond with a server error message
         console.log(error);
@@ -188,7 +197,7 @@ exports.userPut = async (req, res) => {
         if (req.body.password) {
             // Check if the provided password meets the required criteria
             if (!passwordRegex.test(req.body.password)) {
-                res.status(401).json({
+                res.status(422).json({
                     message: "Password must be at least 5 characters and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
                 });
                 return;

@@ -11,6 +11,7 @@
  *     Member:
  *       type: object
  *       required:
+ *         - id
  *         - user_id
  *         - group_id
  *         - accept
@@ -31,10 +32,11 @@
  *         admin:
  *           type: boolean
  *           description: Indicates whether the user is an administrator of the group
- *       example:
- *         user_id: abc123
- *         group_id: xyz456
- *         santa_id: def789
+ *       example: 
+ *         id: 657f52e7bc2b0050338da62a
+ *         user_id: 657f52e7bc2b0050338da62a
+ *         group_id: 657f52e7bc2b0050338da62a
+ *         santa_id: 657f52e7bc2b0050338da62a
  *         accept: true
  *         admin: false
  */
@@ -51,6 +53,8 @@
  *         required: true
  *         schema:
  *           type: string
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -83,6 +87,8 @@
  *         required: true
  *         schema:
  *           type: string
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Member successfully deleted.
@@ -109,6 +115,8 @@
  *         required: true
  *         schema:
  *           type: string
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Invitation declined successfully.
@@ -135,6 +143,8 @@
  *         required: true
  *         schema:
  *           type: string
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Invitation accepted successfully.
@@ -161,6 +171,8 @@
  *         required: true
  *         schema:
  *           type: string
+ *     security:
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Secret Santa assignments initiated successfully.
