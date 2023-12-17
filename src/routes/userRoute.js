@@ -18,7 +18,7 @@ router
     
 router
     .route('/:user_id')
-    .delete(jwtMiddleware.verifyUserToken, userController.userDelete)  //a tester
+    .delete(jwtMiddleware.verifyUserToken, userController.userDelete)  
     .put(jwtMiddleware.verifyUserToken, userController.userPut);
 
 module.exports = router;

@@ -251,7 +251,6 @@ exports.memberDelete = async (req, res) => {
 
         await Member.findOneAndDelete({ user_id: req.params.user_id, group_id: req.params.group_id });
 
-        await User.findByIdAndDelete(req.params.user_id);
         res.status(200).json({ message: 'Utilisateur supprimé' });
 
     } catch (error) {
@@ -263,18 +262,19 @@ exports.memberDelete = async (req, res) => {
 const assignSecretSantas = async (groupId) => {
     try {
         // Remove members with accept false
-        await Member.deleteMany({ group_id: groupId, accept: false });
         
 // Find all members of the group who have not accepted the invitation
 const members = await Member.find({ group_id: groupId, accept: false });
 
 // Iterate through members and delete corresponding users with invited set to true
 for (const member of members) {
-    const user = await User.findByIdAndDelete(member.user_id);
-
+    await User.findOneAndDelete({ _id: member.user_id, invited: true });
 }
 
-        // Find all members of the group who have accepted the invitation
+// Delete all members of the group who have not accepted the invitation
+await Member.deleteMany({ group_id: groupId, accept: false });
+
+// Find all members of the group who have accepted the invitation
         const groupMembers = await Member.find({ group_id: groupId, accept: true });
 
         // Ensure there are at least 3 members for a Secret Santa exchange

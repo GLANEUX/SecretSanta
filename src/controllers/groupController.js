@@ -79,7 +79,7 @@ const members = await Member.find({ group_id: req.params.group_id, accept: false
 
 // Iterate through members and delete corresponding users with invited set to true
 for (const member of members) {
-    const user = await User.findByIdAndDelete(member.user_id);
+    await User.findOneAndDelete({_id: member.user_id, invited: true});
 
 }
 

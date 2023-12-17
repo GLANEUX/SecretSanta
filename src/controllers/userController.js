@@ -97,29 +97,33 @@ exports.userLogin = async (req, res) => {
 //a tester
 exports.userDelete = async (req, res) => {
     try {
-        // Find all groups where the user is an admin
         const groups = await Group.find({ user_id: req.params.user_id });
 
         if (groups.length > 0) {
             // Iterate through each group
             for (const group of groups) {
                 const group_id = group._id;
-
+        
                 // Find all members of the group who have not accepted the invitation
                 const members = await Member.find({ group_id: group_id, accept: false });
-
+        
                 // Iterate through members and delete corresponding users with invited set to true
                 for (const member of members) {
-                    const user = await User.findByIdAndDelete(member.user_id);
+                    // Find the user                    
+                    // Check if the user is invited
+                        // Use findByIdAndDelete to delete the user
+                        await User.findOneAndDelete({_id: member.user_id, invited: true});
+                    
                 }
-
+        
                 // Delete all members of the group
                 await Member.deleteMany({ group_id: group_id });
-
+        
                 // Delete the group itself
                 await Group.findByIdAndDelete(group_id);
             }
         }
+        
 
         // Delete the user
         await User.findByIdAndDelete(req.params.user_id);
