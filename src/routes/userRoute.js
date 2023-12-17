@@ -18,7 +18,7 @@ router
     
 router
     .route('/:user_id')
-    .delete(jwtMiddleware.verifyUserToken, userController.userDelete) //ça ne supprime pas les users avec intited: true
+    .delete(jwtMiddleware.verifyUserToken, userController.userDelete)  
     .put(jwtMiddleware.verifyUserToken, userController.userPut);
 
 module.exports = router;

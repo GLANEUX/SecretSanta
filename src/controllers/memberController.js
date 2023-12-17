@@ -151,10 +151,6 @@ exports.memberRequest = async (req, res) => {
 };
 
 
-
-
-
-
 exports.memberDecline = async (req, res) => {
     try {
 
@@ -207,7 +203,6 @@ exports.memberAccept = async (req, res) => {
 };
 
 
-
 exports.memberDelete = async (req, res) => {
 
     try {
@@ -256,7 +251,6 @@ exports.memberDelete = async (req, res) => {
 
         await Member.findOneAndDelete({ user_id: req.params.user_id, group_id: req.params.group_id });
 
-        await User.findByIdAndDelete(req.params.user_id);
         res.status(200).json({ message: 'Utilisateur supprimé' });
 
     } catch (error) {
@@ -265,14 +259,22 @@ exports.memberDelete = async (req, res) => {
     }
 }
 
-
-
 const assignSecretSantas = async (groupId) => {
     try {
         // Remove members with accept false
-        await Member.deleteMany({ group_id: groupId, accept: false });
+        
+// Find all members of the group who have not accepted the invitation
+const members = await Member.find({ group_id: groupId, accept: false });
 
-        // Find all members of the group who have accepted the invitation
+// Iterate through members and delete corresponding users with invited set to true
+for (const member of members) {
+    await User.findOneAndDelete({ _id: member.user_id, invited: true });
+}
+
+// Delete all members of the group who have not accepted the invitation
+await Member.deleteMany({ group_id: groupId, accept: false });
+
+// Find all members of the group who have accepted the invitation
         const groupMembers = await Member.find({ group_id: groupId, accept: true });
 
         // Ensure there are at least 3 members for a Secret Santa exchange
@@ -280,13 +282,18 @@ const assignSecretSantas = async (groupId) => {
             throw new Error("Insufficient members for Secret Santa exchange");
         }
 
+
+
+
+        await Member.updateMany({ group_id: groupId }, { santa_id: null });
+
         // Shuffle the members array to randomize the order
         const shuffledMembers = shuffleArray(groupMembers);
 
         // Create an array to track assigned Santas
         const assignedSantas = [];
 
-        // Iterate through the shuffled array to assign Secret Santas
+        // Iterate through the shuffled array to assign Secret Santas 
         for (let i = 0; i < shuffledMembers.length; i++) {
             const currentMember = shuffledMembers[i];
             let santaAssigned = false;
@@ -309,13 +316,15 @@ const assignSecretSantas = async (groupId) => {
             }
         }
 
-        console.log("Secret Santas assigned successfully!");
+
+
+
+        // console.log("Secret Santas assigned successfully!");
     } catch (error) {
         console.error(error.message);
     }
 };
 
-// ... (rest of the code remains the same)
 
 // Helper function to shuffle an array (Fisher-Yates algorithm)
 const shuffleArray = (array) => {

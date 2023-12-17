@@ -7,7 +7,7 @@ const jwtMiddleware = require('../middlewares/jwtMiddleware');
 
 router
     .route('/:group_id/:user_id')
-        .delete(jwtMiddleware.verifyUserToken, groupController.groupDelete) //ça ne supprime pas les users avec intited: true
+        .delete(jwtMiddleware.verifyUserToken, groupController.groupDelete) 
         .put(jwtMiddleware.verifyUserToken, groupController.groupUpdate)
         .get(jwtMiddleware.verifyUserToken, groupController.seeMySanta);
 

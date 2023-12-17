@@ -11,7 +11,7 @@ router
 
 router
     .route('/:group_id/:user_id')
-    .delete(jwtMiddleware.verifyToken, memberController.memberDelete)
+    .delete(jwtMiddleware.verifyToken, memberController.memberDelete) 
 
 
 router
@@ -24,7 +24,7 @@ router
 
 router
     .route('/:user_id/:group_id/secretsanta')
-    .post(jwtMiddleware.verifyUserToken, memberController.memberSecretSanta) //ça ne supprime pas les users avec intited: true
+    .post(jwtMiddleware.verifyUserToken, memberController.memberSecretSanta) 
 
 module.exports = router;
 
