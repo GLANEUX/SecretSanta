@@ -282,13 +282,18 @@ await Member.deleteMany({ group_id: groupId, accept: false });
             throw new Error("Insufficient members for Secret Santa exchange");
         }
 
+
+
+
+        await Member.updateMany({ group_id: groupId }, { santa_id: null });
+
         // Shuffle the members array to randomize the order
         const shuffledMembers = shuffleArray(groupMembers);
 
         // Create an array to track assigned Santas
         const assignedSantas = [];
 
-        // Iterate through the shuffled array to assign Secret Santas
+        // Iterate through the shuffled array to assign Secret Santas 
         for (let i = 0; i < shuffledMembers.length; i++) {
             const currentMember = shuffledMembers[i];
             let santaAssigned = false;
@@ -311,7 +316,10 @@ await Member.deleteMany({ group_id: groupId, accept: false });
             }
         }
 
-        console.log("Secret Santas assigned successfully!");
+
+
+
+        // console.log("Secret Santas assigned successfully!");
     } catch (error) {
         console.error(error.message);
     }
