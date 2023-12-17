@@ -1,3 +1,20 @@
+
+
+
+réorganisation de code et test finaux 
+documentation
+developement -> main
+
+// si le temps faire du front
+
+
+
+
+
+
+
+
+
 # 🎄 Develop an API for a "Secret Santa" Application in Node.js 🎁
 
 

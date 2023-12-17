@@ -1,6 +1,8 @@
+//memberModel.js
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+// Define the schema for the Member model
 let memberSchema = new Schema({
     user_id: {
         type: String,
@@ -23,6 +25,6 @@ let memberSchema = new Schema({
     }
 });
 
+// Create and export the Member model based on the schema
 module.exports = mongoose.model('Member', memberSchema);
-
 

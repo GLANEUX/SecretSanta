@@ -1,3 +1,5 @@
+// userDoc.js
+
 /**
  * @swagger
  * tags:
@@ -130,3 +132,32 @@
  *       500:
  *         description: Some server error
  */
+
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Get a list of all users
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved list of users.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   email:
+ *                     type: string
+ *       401:
+ *         description: Unauthorized. Invalid or missing token.
+ *       500:
+ *         description: Some server error
+ */
+
